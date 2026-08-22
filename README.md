@@ -12,14 +12,6 @@ docker compose up
 
 PostgreSQL 16 starts and the files in `sql/` run automatically, in order (schema → triggers → views/functions → seed data).
 
-```
-host: localhost
-port: 5432
-db:   city_library
-user: library_admin
-pass: library_pass
-```
-
 ## Entity-Relationship Diagram
 
 ![ERD](docs/ERD.png)

@@ -81,7 +81,6 @@ A few real bugs turned up while building and testing this against a live databas
 ## Repo structure
 
 ```
-.
 ├── docker-compose.yml
 ├── sql/
 │   ├── 01_schema.sql              -- tables, indexes, CHECK constraints
@@ -90,9 +89,7 @@ A few real bugs turned up while building and testing this against a live databas
 │   └── 04_seed.sql                -- ~20-50 rows per table
 ├── queries/
 │   └── queries.sql                -- sample queries (SELECT/WHERE, JOIN, GROUP BY, HAVING, subqueries)
-└── docs/
-    ├── ERD.pdf
-    └── ERD.png
+└── ERD.png
 ```
 
 ## Seed data
@@ -108,11 +105,6 @@ A few real bugs turned up while building and testing this against a live databas
 | loan | 30 |
 | reservation | 20 |
 | fine | ~7 (generated organically, see below) |
-
-Two things worth calling out:
-
-- **Loan returns are performed as real `UPDATE`s** during seeding, not baked into the initial `INSERT`. That means `fine_on_late_return` actually fires and generates the `fine` rows as a side effect of seeding — the fine count above isn't a fixed target, it's whatever the trigger genuinely produces from the mix of on-time and late returns. A padded, arbitrary fine count would misrepresent what the trigger does.
-- **Reservations are assigned by `copy_id` deterministically**, independent of whether that copy currently has an open loan. That's both more realistic (you can reserve a copy that's checked out) and guarantees an exact, reproducible reservation count on every run — it doesn't depend on how many copies happen to be free after the random loan/return mix, the way an earlier version of this seed script did.
 
 ## Tech
 

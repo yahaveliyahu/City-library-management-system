@@ -1,0 +1,24 @@
+services:
+  db:
+    image: postgres:16
+    container_name: city_library_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: city_library
+      POSTGRES_USER: library_admin
+      POSTGRES_PASSWORD: library_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      # Files here run automatically, in filename order, the first time
+      # the container starts with an empty data volume.
+      - ./sql:/docker-entrypoint-initdb.d:ro
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U library_admin -d city_library"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:

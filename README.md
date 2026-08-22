@@ -41,34 +41,6 @@ Normalized to 3NF. The one cached/derived value (`copy.status`) is kept consiste
 - **`v_member_activity`** — per-member active/total loan counts and unpaid fine balance
 - **`renew_loan(loan_id, extra_days DEFAULT 14)`** — extends a loan's due date; raises an exception if another member has a pending reservation on that copy, or if the loan was already returned
 
-## Demo
-
-```sql
--- Try to loan a copy that's already checked out:
-INSERT INTO loan(copy_id, member_id) VALUES (21, 5);
--- ERROR:  Copy 21 is already on loan
-
--- Reserve a copy that's currently on loan (this is normal — that's
--- the point of a reservation) — the copy correctly stays 'on_loan',
--- it doesn't jump straight to 'reserved':
-INSERT INTO reservation(copy_id, member_id) VALUES (21, 8);
-SELECT status FROM copy WHERE copy_id = 21;
---  status
--- ----------
---  on_loan
-
--- Renew an open loan with no competing reservation:
-SELECT renew_loan(21);
---          renew_loan
--- -------------------------------
---  2026-09-12 17:01:10.302335+00
-
--- Renew a loan that DOES have a competing reservation from someone else:
-SELECT renew_loan(19);
--- ERROR:  Cannot renew loan 19: another member has a pending
---         reservation on this copy
-```
-
 ## Engineering notes
 
 A few real bugs turned up while building and testing this against a live database — worth documenting because they're not the kind of thing you catch by reading the SQL, only by running it:

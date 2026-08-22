@@ -76,7 +76,7 @@ A few real bugs turned up while building and testing this against a live databas
 | copy | 45 |
 | loan | 30 |
 | reservation | 20 |
-| fine | ~7 (generated organically, see below) |
+| fine | ~7 |
 
 ## Tech
 
